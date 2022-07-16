@@ -1,8 +1,7 @@
-import { useRef, useState } from 'react';
+import axios from 'axios';
+import { useRef } from 'react';
 
 export default function App() {
-  const [file, setFile] = useState({});
-
   const hiddenFileInput = useRef(null);
 
   function handleClick() {
@@ -11,7 +10,18 @@ export default function App() {
 
   function handleChange(event) {
     const [selectedFile] = event.target.files;
-    setFile(selectedFile);
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    axios
+      .post('http://localhost:5000/file', formData, {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      })
+      .then((response) => console.log(response.data))
+      .catch((err) => console.log(err));
   }
 
   return (
