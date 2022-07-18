@@ -9,10 +9,13 @@ export default function App() {
   }
 
   function handleChange(event) {
-    const [selectedFile] = event.target.files;
+    const selectedFiles = event.target.files;
 
     const formData = new FormData();
-    formData.append('file', selectedFile);
+
+    [...selectedFiles].forEach((file) => {
+      formData.append('files', file);
+    });
 
     axios
       .post('http://localhost:5000/file', formData, {
@@ -31,7 +34,12 @@ export default function App() {
         <button onClick={handleClick}>
           Enviar <ion-icon name="send"></ion-icon>
         </button>
-        <input type="file" ref={hiddenFileInput} onChange={handleChange} />
+        <input
+          multiple
+          type="file"
+          ref={hiddenFileInput}
+          onChange={handleChange}
+        />
       </div>
     </div>
   );
